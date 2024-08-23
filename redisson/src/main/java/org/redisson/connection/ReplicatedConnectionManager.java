@@ -204,7 +204,7 @@ public class ReplicatedConnectionManager extends MasterSlaveConnectionManager {
                         return CompletableFuture.<Map<String, String>>completedFuture(null);
                     }
 
-                    return connection.async(cfg.getRetryAttempts(), cfg.getRetryInterval(), cfg.getTimeout(),
+                    return connection.async(1, cfg.getRetryInterval(), cfg.getTimeout(),
                                                 StringCodec.INSTANCE, RedisCommands.INFO_REPLICATION);
                 })
                 .thenCompose(r -> {
@@ -237,7 +237,7 @@ public class ReplicatedConnectionManager extends MasterSlaveConnectionManager {
                 })
                 .whenComplete((r, ex) -> {
                     if (ex != null) {
-                        log.error(ex.getMessage(), ex);
+                        log.error("Unable to update node {} status. A new attempt will be made.", uri, ex);
                     }
                 })
                 .toCompletableFuture();

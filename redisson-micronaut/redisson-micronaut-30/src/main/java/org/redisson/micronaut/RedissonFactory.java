@@ -20,13 +20,16 @@ import io.micronaut.core.convert.ConversionService;
 import io.micronaut.scheduling.TaskExecutors;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+import org.redisson.MapCacheNativeWrapper;
 import org.redisson.Redisson;
 import org.redisson.api.RMap;
 import org.redisson.api.RMapCache;
+import org.redisson.api.RMapCacheNative;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.config.Config;
 import org.redisson.micronaut.cache.RedissonCacheConfiguration;
+import org.redisson.micronaut.cache.RedissonCacheNativeConfiguration;
 import org.redisson.micronaut.cache.RedissonSyncCache;
 
 import java.util.Optional;
@@ -64,5 +67,19 @@ public class RedissonFactory {
         return new RedissonSyncCache(conversionService, null, map, executorService, configuration);
     }
 
+    @EachBean(RedissonCacheNativeConfiguration.class)
+    public RedissonSyncCache cache(@Parameter RedissonCacheNativeConfiguration configuration,
+                                   RedissonClient redisson,
+                                   ConversionService conversionService,
+                                   @Named(TaskExecutors.IO) ExecutorService executorService) {
+
+        RMapCache<Object, Object> mapCache = null;
+        RMapCacheNative<Object, Object> map = redisson.getMapCacheNative(configuration.getMapOptions());
+        if (configuration.getExpireAfterWrite().toMillis() != 0) {
+            mapCache = new MapCacheNativeWrapper<>(map, (Redisson) redisson);
+        }
+
+        return new RedissonSyncCache(conversionService, mapCache, map, executorService, configuration);
+    }
 
 }
