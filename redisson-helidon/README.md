@@ -19,7 +19,7 @@ Maven
     <artifactId>redisson-helidon-30</artifactId>
     <!-- for Helidon v4.x.x -->
     <artifactId>redisson-helidon-40</artifactId>
-    <version>3.34.1</version>
+    <version>3.35.0</version>
 </dependency>
 ```
 
@@ -27,11 +27,11 @@ Gradle
 
 ```groovy
 // for Helidon v1.4.x - v2.5.x
-compile 'org.redisson:redisson-helidon-20:3.34.1'
+compile 'org.redisson:redisson-helidon-20:3.35.0'
 // for Helidon v3.x.x
-compile 'org.redisson:redisson-helidon-30:3.34.1'
+compile 'org.redisson:redisson-helidon-30:3.35.0'
 // for Helidon v4.x.x
-compile 'org.redisson:redisson-helidon-40:3.34.1'
+compile 'org.redisson:redisson-helidon-40:3.35.0'
 ```
 
 ### 2. Add settings into `META-INF/microprofile-config.properties` file
@@ -44,7 +44,7 @@ Config structure is a flat Redisson YAML configuration -
 [proxy mode](https://github.com/redisson/redisson/wiki/2.-Configuration#292-proxy-mode-yaml-config-format),
 [multi cluster mode](https://github.com/redisson/redisson/wiki/2.-Configuration/#2102-cluster-yaml-config-format)
 
-Below is the configuration for Redisson instance named `simple`.
+Below is the configuration example for Redisson instance named `simple`.
 ```
 org.redisson.Redisson.simple.singleServerConfig.address=redis://127.0.0.1:6379
 org.redisson.Redisson.simple.singleServerConfig.connectionPoolSize=64

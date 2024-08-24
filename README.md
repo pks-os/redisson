@@ -11,7 +11,7 @@ Based on high-performance async and lock-free Java Redis client and [Netty](http
 ## Features
 
 * Thread-safe implementation
-* JDK 1.8+ compatible
+* JDK 1.8+ up to the latest version compatible
 * Android compatible
 * [Redis](https://redis.io) compatible - from 3.0 up to the latest version
 * [Valkey](https://valkey.io) compatible - from 7.2.5 up to the latest version
@@ -143,14 +143,14 @@ Used by
     <dependency>
        <groupId>org.redisson</groupId>
        <artifactId>redisson</artifactId>
-       <version>3.34.1</version>
+       <version>3.35.0</version>
     </dependency>  
 
 #### Gradle
-    compile 'org.redisson:redisson:3.34.1'  
+    compile 'org.redisson:redisson:3.35.0'  
 
 #### SBT
-    libraryDependencies += "org.redisson" % "redisson" % "3.34.1"
+    libraryDependencies += "org.redisson" % "redisson" % "3.35.0"
 
 #### Java
 
@@ -208,8 +208,8 @@ Upgrade to __[Redisson PRO](https://redisson.pro)__ with **advanced features**.
 
 ## Downloads
    
-[Redisson 3.34.1](https://repo1.maven.org/maven2/org/redisson/redisson/3.34.1/redisson-3.34.1.jar),
-[Redisson node 3.34.1](https://repo1.maven.org/maven2/org/redisson/redisson-all/3.34.1/redisson-all-3.34.1.jar)  
+[Redisson 3.35.0](https://repo1.maven.org/maven2/org/redisson/redisson/3.35.0/redisson-3.35.0.jar),
+[Redisson node 3.35.0](https://repo1.maven.org/maven2/org/redisson/redisson-all/3.35.0/redisson-all-3.35.0.jar)  
 
 ## FAQs
 

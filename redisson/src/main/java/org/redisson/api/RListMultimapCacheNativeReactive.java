@@ -16,12 +16,17 @@
 package org.redisson.api;
 
 /**
- * 
+ * List based Multimap with ability to set TTL per entry.
+ * Stores insertion order and allows duplicates for values mapped to key.
+ * Uses Redis native commands for entry expiration and not a scheduled eviction task.
+ * <p>
+ * Requires <b>Redis 7.4.0 and higher.</b>
+ *
  * @author Nikita Koksharov
  *
- * @param <K> key type
- * @param <V> value type
+ * @param <K> key
+ * @param <V> value
  */
-public interface RSetMultimapCache<K, V> extends RSetMultimap<K, V>, RMultimapCache<K, V>, RDestroyable {
+public interface RListMultimapCacheNativeReactive<K, V> extends RListMultimapReactive<K, V>, RMultimapCacheReactive<K, V> {
 
 }

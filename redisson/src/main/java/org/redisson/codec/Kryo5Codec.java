@@ -38,10 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.esotericsoftware.kryo.util.Util.className;
@@ -94,30 +91,37 @@ public class Kryo5Codec extends BaseCodec {
     private final Pool<Kryo> kryoPool;
     private final Pool<Input> inputPool;
     private final Pool<Output> outputPool;
-    private final boolean registrationRequired;
+    private final Set<String> allowedClasses;
+    private final boolean useReferences;
 
     public Kryo5Codec() {
-        this(null, false);
+        this(null, Collections.emptySet(), false);
     }
 
-    public Kryo5Codec(boolean registrationRequired) {
-        this(null, registrationRequired);
+    public Kryo5Codec(Set<String> allowedClasses, boolean useReferences) {
+        this(null, allowedClasses, useReferences);
     }
 
     public Kryo5Codec(ClassLoader classLoader, Kryo5Codec codec) {
-        this(classLoader, codec.registrationRequired);
+        this(classLoader, codec.allowedClasses, codec.useReferences);
     }
 
     public Kryo5Codec(ClassLoader classLoader) {
-        this(classLoader, false);
+        this(classLoader, Collections.emptySet(), false);
     }
 
-    public Kryo5Codec(ClassLoader classLoader, boolean registrationRequired) {
-        this.registrationRequired = registrationRequired;
+    public Kryo5Codec(ClassLoader classLoader, Set<String> allowedClasses, boolean useReferences) {
+        this.allowedClasses = allowedClasses;
+        this.useReferences = useReferences;
+
         this.kryoPool = new Pool<Kryo>(true, false, 1024) {
             @Override
             protected Kryo create() {
-                return createKryo(classLoader);
+                try {
+                    return createKryo(classLoader, useReferences);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalArgumentException(e);
+                }
             }
         };
 
@@ -136,14 +140,18 @@ public class Kryo5Codec extends BaseCodec {
         };
     }
 
-    protected Kryo createKryo(ClassLoader classLoader) {
+    protected Kryo createKryo(ClassLoader classLoader, boolean useReferences) throws ClassNotFoundException {
         Kryo kryo = new Kryo();
         if (classLoader != null) {
             kryo.setClassLoader(classLoader);
         }
         kryo.setInstantiatorStrategy(new SimpleInstantiatorStrategy());
-        kryo.setRegistrationRequired(registrationRequired);
-        kryo.setReferences(false);
+        kryo.setRegistrationRequired(!allowedClasses.isEmpty());
+        kryo.setReferences(useReferences);
+
+        for (String allowedClass : allowedClasses) {
+            kryo.register(Class.forName(allowedClass));
+        }
 
         try {
             Class<?>[] f = Collections.class.getDeclaredClasses();
