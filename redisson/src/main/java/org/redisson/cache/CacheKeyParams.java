@@ -13,14 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.redisson.codec;
+package org.redisson.cache;
+
+import java.util.Arrays;
 
 /**
- * Json codec interface.
  *
  * @author Nikita Koksharov
  *
  */
-public interface JsonCodec extends ObjectCodec {
+public final class CacheKeyParams {
+
+    private final Object[] values;
+
+    public CacheKeyParams(Object[] values) {
+        this.values = values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CacheKeyParams cacheKey = (CacheKeyParams) o;
+        return Arrays.deepEquals(values, cacheKey.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(values);
+    }
 
 }

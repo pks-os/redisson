@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 
@@ -537,4 +539,37 @@ public abstract class AbstractCacheMap<K, V> implements Cache<K, V> {
         });
         return result.get();
     }
+
+    @Override
+    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+        CachedValue<K, V> v = map.computeIfAbsent(key, k -> {
+            V value = mappingFunction.apply(k);
+            CachedValue<K, V> entry = create(key, value, timeToLiveInMillis, maxIdleInMillis);
+            return entry;
+        });
+        if (v != null) {
+            return v.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        CachedValue<K, V> v = map.computeIfPresent(key, (k, e) -> {
+            if (!isValueExpired(e)) {
+                V value = remappingFunction.apply(k, e.getValue());
+                if (value == null) {
+                    return null;
+                }
+                CachedValue<K, V> entry = create(key, value, timeToLiveInMillis, maxIdleInMillis);
+                return entry;
+            }
+            return null;
+        });
+        if (v != null) {
+            return v.getValue();
+        }
+        return null;
+    }
+
 }
