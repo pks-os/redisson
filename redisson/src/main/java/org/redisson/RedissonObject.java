@@ -27,7 +27,6 @@ import org.redisson.client.protocol.RedisCommands;
 import org.redisson.client.protocol.pubsub.PubSubType;
 import org.redisson.command.BatchService;
 import org.redisson.command.CommandAsyncExecutor;
-import org.redisson.config.Protocol;
 import org.redisson.connection.ServiceManager;
 import org.redisson.misc.CompletableFutureWrapper;
 import org.redisson.misc.Hash;
@@ -651,7 +650,7 @@ public abstract class RedissonObject implements RObject {
     }
 
     protected final RFuture<Integer> addTrackingListenerAsync(TrackingListener listener) {
-        if (getServiceManager().getCfg().getProtocol() != Protocol.RESP3) {
+        if (!getServiceManager().isResp3()) {
             throw new IllegalStateException("`protocol` config setting should be set to RESP3 value");
         }
 

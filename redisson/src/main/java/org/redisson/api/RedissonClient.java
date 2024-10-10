@@ -1928,8 +1928,11 @@ public interface RedissonClient {
 
     /**
      * Returns client side caching facade interface with the specified <code>options</code>.
-     * <p><strong>
-     * NOTE: client side caching feature is ineffective for Map or JSON based structures.<br>
+     * <p>
+     * Requires <b>Redis 5.0.0 and higher.</b>
+     * <p>
+     * <strong>
+     * NOTE: client side caching feature invalidates whole Map per entry change which is ineffective.
      * Use local cached <a href="https://redisson.org/docs/data-and-services/collections/#eviction-local-cache-and-data-partitioning">Map</a>, <a href="https://redisson.org/docs/data-and-services/collections/#local-cache">JSON Store</a> instead.
      * </strong>
      *
