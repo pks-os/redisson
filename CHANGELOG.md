@@ -3,6 +3,12 @@ Redisson Releases History
 
 Upgrade to __[Redisson PRO](https://redisson.pro)__ with **advanced features**.
 
+### 31-Oct-2024 - 3.38.1 released
+
+Fixed - Kryo codec upgraded to 5.6.2 for JDK 8 compatibility (thanks to @Wujiaxuan007)  
+Fixed - pollAsync() and removeAsync() methods of RPriorityQueue and RPriorityDeque objects aren't guarded properly with lock  
+Fixed - Spring Cache `Cacheable(sync)` annotation loads value multiple times for reactive types or completableFuture
+
 ### 30-Oct-2024 - 3.38.0 released
 
 Feature - [Local cache for Live Object Service](https://redisson.org/docs/data-and-services/services/#local-cache) support  
@@ -21,7 +27,7 @@ Improvement - Add check, The parameter timeToLive should be greater than or equa
 
 Fixed - `lazyInitialization=true` doesn't work in cluster mode (regression since 3.27.0)  
 Fixed - Spring Cache @Cacheable(sync) doesn't work with reactive types or completableFuture  
-Fixed - Pub/Sub connections randomly disconnecting (regression since 3.26.0) (thanks to @wjx)  
+Fixed - Pub/Sub connections randomly disconnecting (regression since 3.26.0) (thanks to @Wujiaxuan007)  
 Fixed - `RLiveObjectService.persist()` and `merge()` methods, when called with multiple arguments, return detached objects  
 Fixed - `RJsonBucketReactive` and `RJsonBucketRx` use Reactive Types as arguments  
 Fixed - `ClassNotFoundException` is thrown when a LiveObject expires  

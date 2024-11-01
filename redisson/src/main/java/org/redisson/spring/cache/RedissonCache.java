@@ -15,11 +15,13 @@
  */
 package org.redisson.spring.cache;
 
+import org.redisson.RedissonObject;
 import org.redisson.api.RFuture;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
 import org.redisson.api.RMapCache;
 import org.redisson.client.RedisException;
+import org.redisson.connection.ServiceManager;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 
@@ -176,14 +178,16 @@ public class RedissonCache implements Cache {
     }
 
     public <T> CompletableFuture<T> retrieve(Object key, Supplier<CompletableFuture<T>> valueLoader) {
-        long threadId = Thread.currentThread().getId();
         return retrieve(key).thenCompose(v -> {
             if (v != null) {
                 return CompletableFuture.completedFuture((T) v);
             }
 
+            ServiceManager sm = ((RedissonObject) map).getServiceManager();
+            long randomId = sm.generateValue();
+
             RLock lock = map.getLock(key);
-            return lock.lockAsync(threadId).thenCompose(rr -> {
+            return lock.lockAsync(randomId).thenCompose(rr -> {
                 return map.getAsync(key)
                         .thenCompose(r -> {
                             if (r != null) {
@@ -206,7 +210,7 @@ public class RedissonCache implements Cache {
                             });
                         })
                         .whenComplete((r1, e) -> {
-                            lock.unlockAsync(threadId);
+                            lock.unlockAsync(randomId);
                         });
             });
         });
