@@ -30,15 +30,16 @@ public interface StreamReadArgs {
     /**
      * Defines stream data size limit.
      *
-     * @param count - stream data size limit
+     * @param count stream data size limit
      * @return arguments object
      */
     StreamReadArgs count(int count);
 
     /**
      * Defines time interval to wait for stream data availability.
+     * <code>0</code> is used to wait infinitely.
      *
-     * @param timeout - timeout duration
+     * @param timeout timeout duration
      * @return arguments object
      */
     StreamReadArgs timeout(Duration timeout);
@@ -47,7 +48,7 @@ public interface StreamReadArgs {
      * Defines last stream id received from current Stream.
      * Read stream data with ids greater than defined id.
      *
-     * @param id0 - last stream id of current stream
+     * @param id0 last stream id of current stream
      * @return arguments object
      */
     static StreamReadArgs greaterThan(StreamMessageId id0) {
