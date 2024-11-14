@@ -146,7 +146,10 @@ public class RedissonMapCache<K, V> extends RedissonMap<K, V> implements RMapCac
             if (value == null) {
                 V newValue = mappingFunction.apply(key);
                 if (newValue != null) {
-                    fastPut(key, newValue, ttl.toMillis(), TimeUnit.MILLISECONDS);
+                    V r = putIfAbsent(key, newValue, ttl.toMillis(), TimeUnit.MILLISECONDS);
+                    if (r != null) {
+                        return r;
+                    }
                     return newValue;
                 }
                 return null;
@@ -155,6 +158,43 @@ public class RedissonMapCache<K, V> extends RedissonMap<K, V> implements RMapCac
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public RFuture<V> computeIfAbsentAsync(K key, Duration ttl, Function<? super K, ? extends V> mappingFunction) {
+        checkNotBatch();
+
+        checkKey(key);
+        Objects.requireNonNull(mappingFunction);
+
+        RLock lock = getLock(key);
+        long threadId = Thread.currentThread().getId();
+        CompletionStage<V> f = lock.lockAsync(threadId)
+                .thenCompose(r -> {
+                    RFuture<V> oldValueFuture = getAsync(key, threadId);
+                    return oldValueFuture.thenCompose(oldValue -> {
+                        if (oldValue != null) {
+                            return CompletableFuture.completedFuture(oldValue);
+                        }
+
+                        return CompletableFuture.supplyAsync(() -> mappingFunction.apply(key), getServiceManager().getExecutor())
+                                .thenCompose(newValue -> {
+                                    if (newValue != null) {
+                                        return putIfAbsentAsync(key, newValue, ttl.toMillis(), TimeUnit.MILLISECONDS).thenApply(rr -> {
+                                            if (rr != null) {
+                                                return rr;
+                                            }
+                                            return newValue;
+                                        });
+                                    }
+                                    return CompletableFuture.completedFuture(null);
+                                });
+                    }).whenComplete((c, e) -> {
+                        lock.unlockAsync(threadId);
+                    });
+                });
+
+        return new CompletableFutureWrapper<>(f);
     }
 
     @Override
