@@ -1,5 +1,13 @@
 [
 {
+  "name": "org.redisson.codec.JsonJacksonCodec",
+  "allDeclaredConstructors":true
+},
+{
+  "name": "org.redisson.codec.SnappyCodecV2",
+  "allDeclaredConstructors":true
+},
+{
   "name": "org.redisson.codec.Kryo5Codec",
   "allDeclaredConstructors":true
 },
@@ -754,6 +762,198 @@
 },
 {
   "name":"org.redisson.executor.RemoteExecutorServiceAsync",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonSetReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonBinaryStreamReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonBlockingDequeReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonBlockingQueueReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonKeysReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonLexSortedSetReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonListMultimapCacheReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonListMultimapReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonListReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonMapCacheReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonMapReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonReadWriteLockReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonReliableTopicReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonScoredSortedSetReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonSetCacheReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonSetMultimapCacheReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonSetMultimapReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonTimeSeriesReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonTopicReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonTransferQueueReactive",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonSetRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonBinaryStreamRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonBlockingDequeRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonBlockingQueueRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonKeysRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonLexSortedSetRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonListMultimapRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonListRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonMapCacheRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonMapRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonReadWriteLockRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonReliableTopicRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonScoredSortedSetRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonSetCacheRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonSetMultimapRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.reactive.RedissonTimeSeriesRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonTopicRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.rx.RedissonTransferQueueRx",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalSet",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalBucket",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalBuckets",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalLocalCachedMap",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalLock",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalMap",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalMapCache",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalReadLock",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalSetCache",
+  "allPublicMethods":true
+},
+{
+  "name":"org.redisson.transaction.RedissonTransactionalWriteLock",
   "allPublicMethods":true
 },
 {
