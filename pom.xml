@@ -3,11 +3,11 @@
 
     <groupId>org.redisson</groupId>
     <artifactId>redisson-parent</artifactId>
-    <version>3.38.2-SNAPSHOT</version>
+    <version>3.39.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Redisson</name>
-    <description>Easy Redis Java client and Real-Time Data Platform. Valkey compatible. Sync/Async/RxJava3/Reactive API. Client side caching. Over 50 Redis based Java objects and services: JCache API, Apache Tomcat, Hibernate, Spring, Set, Multimap, SortedSet, Map, List, Queue, Deque, Semaphore, Lock, AtomicLong, Map Reduce, Bloom filter, Scheduler, RPC</description>
+    <description>Easy Redis Java client and Real-Time Data Platform. Valkey compatible. Sync/Async/RxJava3/Reactive API. Client side caching. Over 50 Redis based Java objects and services: JCache API (JSR-107), Hibernate Cache, MyBatis Cache, Quarkus Cache, Micronaut Cache, Apache Tomcat Session, Spring Session, Micronaut Session, Hibernate, Spring Boot Starter, Spring Cache, Spring Session, Spring Transaction Manager, Spring Cloud Stream, Spring Data Redis, JSON, Set, Multimap, Geo, SortedSet, Map, List, Queue, Deque, Semaphore, ReadWriteLock, FairLock, Lock, AtomicLong, AtomicDouble, LongAdder, DoubleAdder, Map Reduce, Bloom filter, Scheduler, RPC</description>
     <inceptionYear>2014</inceptionYear>
     <url>http://redisson.org</url>
 
@@ -161,33 +161,33 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.10.2</version>
+                <version>5.10.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>5.10.2</version>
+                <version>5.10.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.6</version>
+                <version>1.5.12</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.20.2</version>
+                <version>1.20.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-bom</artifactId>
-                <version>4.1.114.Final</version>
+                <version>4.1.115.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
