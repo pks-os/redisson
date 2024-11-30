@@ -57,7 +57,7 @@ High-performance async and lock-free Java client for Redis and Valkey based on [
 * [RxJava3](https://redisson.org/docs/api-models/#rxjava-api) API  
 * [Asynchronous](https://redisson.org/docs/api-models/#synchronous-and-asynchronous-api) API  
 * Local cache support including [Caffeine](https://github.com/ben-manes/caffeine)-based implementation
-* [Cache API implementations](https://redisson.org/docs/cache-api-implementations)
+* [Cache API implementations](https://redisson.org/docs/cache-api-implementations)  
     Spring Cache, JCache API (JSR-107), Hibernate Cache, MyBatis Cache, Quarkus Cache, Micronaut Cache
 * [Distributed Java objects](https://redisson.org/docs/data-and-services/objects)  
     Object holder, JSON holder, Binary stream holder, Geospatial holder, BitSet, PublishSubscribe, Bloom filter, HyperLogLog
@@ -81,6 +81,7 @@ High-performance async and lock-free Java client for Redis and Valkey based on [
 * 2000+ unit tests  
 
 ## Comparing solutions
+- [Redisson vs Spring Data Redis](https://redisson.org/articles/feature-comparison-redisson-vs-spring-data-redis.html)
 - [Redisson vs Jedis](https://redisson.org/feature-comparison-redisson-vs-jedis.html)
 - [Redisson vs Lettuce](https://redisson.org/feature-comparison-redisson-vs-lettuce.html)
 - [Redis vs Apache Ignite](https://redisson.org/feature-comparison-redis-vs-ignite.html)
