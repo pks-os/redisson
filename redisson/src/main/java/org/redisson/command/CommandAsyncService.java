@@ -124,7 +124,7 @@ public class CommandAsyncService implements CommandAsyncExecutor {
         this.trackChanges = false;
     }
 
-    public CommandAsyncService(ConnectionManager connectionManager, RedissonObjectBuilder objectBuilder,
+    protected CommandAsyncService(ConnectionManager connectionManager, RedissonObjectBuilder objectBuilder,
                                RedissonObjectBuilder.ReferenceType referenceType) {
         this.connectionManager = connectionManager;
         this.objectBuilder = objectBuilder;
@@ -632,7 +632,7 @@ public class CommandAsyncService implements CommandAsyncExecutor {
 
     private static final AtomicBoolean SORT_RO_SUPPORTED = new AtomicBoolean(true);
     
-    public <V, R> RFuture<R> async(boolean readOnlyMode, NodeSource source, Codec codec,
+    protected <V, R> RFuture<R> async(boolean readOnlyMode, NodeSource source, Codec codec,
             RedisCommand<V> command, Object[] params, boolean ignoreRedirect, boolean noRetry) {
         RedisCommand<V> cmnd = getServiceManager().resp3(command);
 

@@ -24,7 +24,6 @@ import org.redisson.command.CommandAsyncExecutor;
 import org.redisson.executor.RemotePromise;
 import org.redisson.misc.CompletableFutureWrapper;
 import org.redisson.rx.CommandRxExecutor;
-import org.redisson.rx.CommandRxService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +44,7 @@ public class RxRemoteProxy extends AsyncRemoteProxy {
         if (commandExecutor instanceof CommandRxExecutor) {
             return commandExecutor;
         }
-        return new CommandRxService(commandExecutor.getConnectionManager(), commandExecutor.getObjectBuilder());
+        return CommandRxExecutor.create(commandExecutor.getConnectionManager(), commandExecutor.getObjectBuilder());
     }
 
     @Override

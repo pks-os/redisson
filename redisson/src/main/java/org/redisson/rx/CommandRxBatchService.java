@@ -42,7 +42,7 @@ public class CommandRxBatchService extends CommandRxService implements BatchServ
 
     private final CommandBatchService batchService;
 
-    public CommandRxBatchService(ConnectionManager connectionManager, CommandAsyncExecutor executor, BatchOptions options) {
+    CommandRxBatchService(ConnectionManager connectionManager, CommandAsyncExecutor executor, BatchOptions options) {
         super(connectionManager, executor.getObjectBuilder());
         batchService = new CommandBatchService(executor, options, RedissonObjectBuilder.ReferenceType.RXJAVA);
     }
@@ -70,7 +70,7 @@ public class CommandRxBatchService extends CommandRxService implements BatchServ
     }
     
     @Override
-    public <V, R> RFuture<R> async(boolean readOnlyMode, NodeSource nodeSource,
+    protected <V, R> RFuture<R> async(boolean readOnlyMode, NodeSource nodeSource,
             Codec codec, RedisCommand<V> command, Object[] params, boolean ignoreRedirect, boolean noRetry) {
         return batchService.async(readOnlyMode, nodeSource, codec, command, params, ignoreRedirect, noRetry);
     }

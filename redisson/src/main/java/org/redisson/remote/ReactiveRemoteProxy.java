@@ -20,7 +20,6 @@ import org.redisson.command.CommandAsyncExecutor;
 import org.redisson.executor.RemotePromise;
 import org.redisson.misc.CompletableFutureWrapper;
 import org.redisson.reactive.CommandReactiveExecutor;
-import org.redisson.reactive.CommandReactiveService;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public class ReactiveRemoteProxy extends AsyncRemoteProxy {
         if (commandExecutor instanceof CommandReactiveExecutor) {
             return commandExecutor;
         }
-        return new CommandReactiveService(commandExecutor.getConnectionManager(), commandExecutor.getObjectBuilder());
+        return CommandReactiveExecutor.create(commandExecutor.getConnectionManager(), commandExecutor.getObjectBuilder());
     }
 
     @Override

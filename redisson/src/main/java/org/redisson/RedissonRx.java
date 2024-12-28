@@ -39,20 +39,20 @@ import java.util.Collection;
  * @author Nikita Koksharov
  *
  */
-public class RedissonRx implements RedissonRxClient {
+public final class RedissonRx implements RedissonRxClient {
 
-    protected final WriteBehindService writeBehindService;
-    protected final EvictionScheduler evictionScheduler;
-    protected final CommandRxExecutor commandExecutor;
-    protected final ConnectionManager connectionManager;
+    private final WriteBehindService writeBehindService;
+    private final EvictionScheduler evictionScheduler;
+    private final CommandRxExecutor commandExecutor;
+    private final ConnectionManager connectionManager;
 
-    protected RedissonRx(ConnectionManager connectionManager, EvictionScheduler evictionScheduler, WriteBehindService writeBehindService) {
+    RedissonRx(ConnectionManager connectionManager, EvictionScheduler evictionScheduler, WriteBehindService writeBehindService) {
         this.connectionManager = connectionManager;
         RedissonObjectBuilder objectBuilder = null;
         if (connectionManager.getServiceManager().getCfg().isReferenceEnabled()) {
             objectBuilder = new RedissonObjectBuilder(this);
         }
-        commandExecutor = new CommandRxService(connectionManager, objectBuilder);
+        commandExecutor = CommandRxExecutor.create(connectionManager, objectBuilder);
         this.evictionScheduler = evictionScheduler;
         this.writeBehindService = writeBehindService;
     }

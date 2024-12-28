@@ -26,7 +26,6 @@ import org.redisson.client.codec.Codec;
 import org.redisson.client.protocol.RedisCommand;
 import org.redisson.connection.ConnectionManager;
 import org.redisson.connection.MasterSlaveEntry;
-import org.redisson.connection.NodeSource;
 import org.redisson.connection.ServiceManager;
 import org.redisson.liveobject.core.RedissonObjectBuilder;
 
@@ -48,7 +47,7 @@ public interface CommandAsyncExecutor {
     CommandAsyncExecutor copy(boolean trackChanges);
 
     RedissonObjectBuilder getObjectBuilder();
-    
+
     ConnectionManager getConnectionManager();
 
     ServiceManager getServiceManager();
@@ -62,7 +61,7 @@ public interface CommandAsyncExecutor {
     <V> V get(RFuture<V> future);
 
     <V> V get(CompletableFuture<V> future);
-    
+
     <V> V getInterrupted(RFuture<V> future) throws InterruptedException;
 
     <V> V getInterrupted(CompletableFuture<V> future) throws InterruptedException;
@@ -70,7 +69,7 @@ public interface CommandAsyncExecutor {
     <T, R> RFuture<R> writeAsync(RedisClient client, Codec codec, RedisCommand<T> command, Object... params);
 
     <T, R> RFuture<R> writeAsync(MasterSlaveEntry entry, Codec codec, RedisCommand<T> command, Object... params);
-    
+
     <T, R> RFuture<R> writeAsync(byte[] key, Codec codec, RedisCommand<T> command, Object... params);
 
     <T, R> RFuture<R> writeAsync(ByteBuf key, Codec codec, RedisCommand<T> command, Object... params);
@@ -133,9 +132,6 @@ public interface CommandAsyncExecutor {
 
     <T, R> RFuture<R> readRandomAsync(RedisClient client, Codec codec, RedisCommand<T> command, Object... params);
 
-    <V, R> RFuture<R> async(boolean readOnlyMode, NodeSource source, Codec codec,
-                            RedisCommand<V> command, Object[] params, boolean ignoreRedirect, boolean noRetry);
-
     <V> RFuture<V> pollFromAnyAsync(String name, Codec codec, RedisCommand<?> command, long secondsTimeout, String... queueNames);
 
     ByteBuf encode(Codec codec, Object value);
@@ -167,5 +163,10 @@ public interface CommandAsyncExecutor {
     boolean isTrackChanges();
 
     CommandBatchService createCommandBatchService(BatchOptions options);
+
+    static CommandAsyncExecutor create(ConnectionManager connectionManager, RedissonObjectBuilder objectBuilder,
+                                       RedissonObjectBuilder.ReferenceType referenceType) {
+        return new CommandAsyncService(connectionManager, objectBuilder, referenceType);
+    }
 
 }
