@@ -16,36 +16,17 @@
 package org.redisson.client;
 
 /**
- * Detects failed Redis node depending
- * on {@link #isNodeFailed()} method implementation.
- *
+ * This error occurs when Slave lost connection with Master.
+ * 
  * @author Nikita Koksharov
  *
  */
-public interface FailedNodeDetector {
+public class RedisMasterDownException extends RedisRetryException {
 
-    void onConnectSuccessful();
+    private static final long serialVersionUID = -2565335188503354660L;
 
-    @Deprecated
-    void onConnectFailed();
-
-    default void onConnectFailed(Throwable cause) {
-        onConnectFailed();
+    public RedisMasterDownException(String message) {
+        super(message);
     }
-
-    void onPingSuccessful();
-
-    @Deprecated
-    void onPingFailed();
-
-    default void onPingFailed(Throwable cause) {
-        onPingFailed();
-    }
-
-    void onCommandSuccessful();
-
-    void onCommandFailed(Throwable cause);
-
-    boolean isNodeFailed();
 
 }
