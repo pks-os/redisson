@@ -135,7 +135,6 @@ public class BaseConfig<T extends BaseConfig<T>> {
         setClientName(config.getClientName());
         setConnectTimeout(config.getConnectTimeout());
         setIdleConnectionTimeout(config.getIdleConnectionTimeout());
-        setSslEnableEndpointIdentification(config.isSslEnableEndpointIdentification());
         setSslProvider(config.getSslProvider());
         setSslTruststore(config.getSslTruststore());
         setSslTruststorePassword(config.getSslTruststorePassword());
@@ -351,6 +350,7 @@ public class BaseConfig<T extends BaseConfig<T>> {
      */
     @Deprecated
     public T setSslEnableEndpointIdentification(boolean sslEnableEndpointIdentification) {
+        log.warn("sslEnableEndpointIdentification setting is deprecated. Use sslVerificationMode setting instead.");
         if (sslEnableEndpointIdentification) {
             this.sslVerificationMode = SslVerificationMode.STRICT;
         } else {

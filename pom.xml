@@ -3,7 +3,7 @@
 
     <groupId>org.redisson</groupId>
     <artifactId>redisson-parent</artifactId>
-    <version>3.41.1-SNAPSHOT</version>
+    <version>3.42.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Redisson</name>
@@ -160,20 +160,32 @@
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.11.4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.10.4</version>
+                <version>5.11.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>5.10.4</version>
+                <version>5.11.4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency> 
+                <groupId>org.junit.platform</groupId> 
+                <artifactId>junit-platform-runner</artifactId> 
+                <version>1.11.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.12</version>
+                <version>1.5.16</version>
                 <scope>test</scope>
             </dependency>
 
