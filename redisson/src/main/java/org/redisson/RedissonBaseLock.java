@@ -45,13 +45,13 @@ import java.util.concurrent.locks.Condition;
  */
 public abstract class RedissonBaseLock extends RedissonExpirable implements RLock {
 
-    public static class ExpirationEntry {
+    static class ExpirationEntry {
 
         private final Queue<Long> threadsQueue = new ConcurrentLinkedQueue<>();
         private final Map<Long, Integer> threadIds = new ConcurrentHashMap<>();
         private volatile Timeout timeout;
 
-        public ExpirationEntry() {
+        ExpirationEntry() {
             super();
         }
 
@@ -95,7 +95,7 @@ public abstract class RedissonBaseLock extends RedissonExpirable implements RLoc
     private static final Logger log = LoggerFactory.getLogger(RedissonBaseLock.class);
 
     private static final ConcurrentMap<String, ExpirationEntry> EXPIRATION_RENEWAL_MAP = new ConcurrentHashMap<>();
-    protected long internalLockLeaseTime;
+    final long internalLockLeaseTime;
 
     final String id;
     final String entryName;
@@ -158,7 +158,7 @@ public abstract class RedissonBaseLock extends RedissonExpirable implements RLoc
         ee.setTimeout(task);
     }
     
-    protected void scheduleExpirationRenewal(long threadId) {
+    protected final void scheduleExpirationRenewal(long threadId) {
         ExpirationEntry entry = new ExpirationEntry();
         entry.addThreadId(threadId);
         ExpirationEntry oldEntry = EXPIRATION_RENEWAL_MAP.putIfAbsent(getEntryName(), entry);
