@@ -24,7 +24,6 @@ import org.redisson.command.CommandAsyncExecutor;
 import org.redisson.pubsub.LockPubSub;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 
@@ -94,7 +93,7 @@ public class RedissonReadLock extends RedissonLock implements RLock {
                 "if (mode == false) then " +
                     "redis.call(ARGV[3], KEYS[2], ARGV[1]); " +
                     "redis.call('set', KEYS[5], 1, 'px', ARGV[4]); " +
-                    "return 1; " +
+                    "return nil; " +
                 "end; " +
                 "local lockExists = redis.call('hexists', KEYS[1], ARGV[2]); " +
                 "if (lockExists == 0) then " +
@@ -143,36 +142,20 @@ public class RedissonReadLock extends RedissonLock implements RLock {
     protected String getKeyPrefix(long threadId, String timeoutPrefix) {
         return timeoutPrefix.split(":" + getLockName(threadId))[0];
     }
-    
+
     @Override
-    protected CompletionStage<Boolean> renewExpirationAsync(long threadId) {
+    protected void scheduleExpirationRenewal(long threadId) {
         String timeoutPrefix = getReadWriteTimeoutNamePrefix(threadId);
         String keyPrefix = getKeyPrefix(threadId, timeoutPrefix);
-        
-        return commandExecutor.syncedEval(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,
-                "local counter = redis.call('hget', KEYS[1], ARGV[2]); " +
-                "if (counter ~= false) then " +
-                    "redis.call('pexpire', KEYS[1], ARGV[1]); " +
-                    
-                    "if (redis.call('hlen', KEYS[1]) > 1) then " +
-                        "local keys = redis.call('hkeys', KEYS[1]); " + 
-                        "for n, key in ipairs(keys) do " + 
-                            "counter = tonumber(redis.call('hget', KEYS[1], key)); " + 
-                            "if type(counter) == 'number' then " + 
-                                "for i=counter, 1, -1 do " + 
-                                    "redis.call('pexpire', KEYS[2] .. ':' .. key .. ':rwlock_timeout:' .. i, ARGV[1]); " + 
-                                "end; " + 
-                            "end; " + 
-                        "end; " +
-                    "end; " +
-                    
-                    "return 1; " +
-                "end; " +
-                "return 0;",
-            Arrays.<Object>asList(getRawName(), keyPrefix),
-            internalLockLeaseTime, getLockName(threadId));
+        renewalScheduler.renewReadLock(getRawName(), threadId, getLockName(threadId), keyPrefix);
     }
-    
+
+    @Override
+    protected void cancelExpirationRenewal(Long threadId, Boolean unlockResult) {
+        super.cancelExpirationRenewal(threadId, unlockResult);
+        renewalScheduler.cancelReadLockRenewal(getRawName(), threadId);
+    }
+
     @Override
     public Condition newCondition() {
         throw new UnsupportedOperationException();
