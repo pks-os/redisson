@@ -380,7 +380,7 @@ public class RedissonScheduledExecutorServiceTest extends RedisDockerTest {
         RScheduledExecutorService executor = redisson.getExecutorService("test", ExecutorOptions.defaults().taskRetryInterval(2, TimeUnit.SECONDS));
         executor.schedule(new ScheduledRunnableTask("executed1"), CronSchedule.of("0/5 * * * * ?"));
         executor.schedule(new ScheduledRunnableTask("executed2"), CronSchedule.of("0/1 * * * * ?"));
-        Thread.sleep(30500);
+        Thread.sleep(30100);
         assertThat(redisson.getAtomicLong("executed1").get()).isEqualTo(6);
         assertThat(redisson.getAtomicLong("executed2").get()).isEqualTo(30);
     }
@@ -616,8 +616,36 @@ public class RedissonScheduledExecutorServiceTest extends RedisDockerTest {
         assertThat(redisson.getAtomicLong("executed1").get()).isEqualTo(1);
     }
 
-
     @Test
+    public void testIdCheck() {
+        RScheduledExecutorService executor = redisson.getExecutorService("test");
+
+        executor.schedule("1", new RunnableTask(), Duration.ofSeconds(12));
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
+            executor.submit("1", new RunnableTask(), Duration.ofSeconds(12));
+        });
+
+        executor.schedule("2", new CallableTask(), Duration.ofSeconds(12));
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
+            executor.submit("2", new CallableTask(), Duration.ofSeconds(12));
+        });
+
+        executor.scheduleWithFixedDelay("3", new RunnableTask(), Duration.ofSeconds(1), Duration.ofSeconds(10));
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
+            executor.scheduleWithFixedDelay("3", new RunnableTask(), Duration.ofSeconds(1), Duration.ofSeconds(10));
+        });
+
+        executor.scheduleAtFixedRate("4", new RunnableTask(), Duration.ofSeconds(1), Duration.ofSeconds(10));
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
+            executor.scheduleAtFixedRate("4", new RunnableTask(), Duration.ofSeconds(1), Duration.ofSeconds(10));
+        });
+    }
+
+        @Test
     public void testCancelAtFixedRate() throws InterruptedException, ExecutionException {
         RScheduledExecutorService executor = redisson.getExecutorService("test");
         ScheduledFuture<?> future1 = executor.scheduleAtFixedRate(new ScheduledRunnableTask("executed1"), 1, 2, TimeUnit.SECONDS);
