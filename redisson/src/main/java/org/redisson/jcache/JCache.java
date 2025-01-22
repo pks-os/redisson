@@ -70,7 +70,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
 
     final JCacheManager cacheManager;
     final JCacheConfiguration<K, V> config;
-    private final ConcurrentMap<CacheEntryListenerConfiguration<K, V>, Map<Integer, String>> listeners = new ConcurrentHashMap<>();
+    final ConcurrentMap<CacheEntryListenerConfiguration<K, V>, Map<Integer, String>> listeners = new ConcurrentHashMap<>();
     final Redisson redisson;
 
     private CacheLoader<K, V> cacheLoader;
@@ -82,7 +82,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
      * No locking required in atomic execution mode.
      */
 
-    public JCache(JCacheManager cacheManager, Redisson redisson, String name, JCacheConfiguration<K, V> config, boolean hasOwnRedisson) {
+    JCache(JCacheManager cacheManager, Redisson redisson, String name, JCacheConfiguration<K, V> config, boolean hasOwnRedisson) {
         super(redisson.getConfig().getCodec(), redisson.getCommandExecutor(), name);
 
         this.hasOwnRedisson = hasOwnRedisson;
@@ -350,7 +350,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
                   + "end; "
 
                   + "return value; ",
-                 Arrays.<Object>asList(name, getTimeoutSetName(name), getRemovedChannelName(name)),
+                 Arrays.asList(name, getTimeoutSetName(name)),
                  accessTimeout, System.currentTimeMillis(), encodeMapKey(key));
         }
 
@@ -437,7 +437,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
         return value;
     }
 
-    private <T, R> R write(String key, RedisCommand<T> command, Object... params) {
+    <T, R> R write(String key, RedisCommand<T> command, Object... params) {
         RFuture<R> future = commandExecutor.writeAsync(key, command, params);
         try {
             return get(future);
@@ -1025,7 +1025,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
                                       + "redis.call('hdel', KEYS[1], key); "
                                       + "redis.call('zrem', KEYS[2], key); "
                                       + "local msg = struct.pack('Lc0Lc0', string.len(key), key, string.len(value), value); "
-                                      + "redis.call('publish', KEYS[3], {key, value}); "
+                                      + "redis.call('publish', KEYS[3], msg); "
                                   + "elseif accessTimeout ~= '-1' then "
                                       + "redis.call('zadd', KEYS[2], accessTimeout, key); "
                                   + "end; "
@@ -2766,7 +2766,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
         return oldValue;
     }
 
-    private void incrementOldValueListenerCounter(String counterName) {
+    void incrementOldValueListenerCounter(String counterName) {
         evalWrite(getRawName(), codec, RedisCommands.EVAL_INTEGER,
                 "return redis.call('incr', KEYS[1]);",
                 Arrays.<Object>asList(counterName));
@@ -3167,9 +3167,9 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
         registerCacheEntryListener(cacheEntryListenerConfiguration, true);
     }
 
-    private JCacheEventCodec.OSType osType;
+    JCacheEventCodec.OSType osType;
 
-    private void registerCacheEntryListener(CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration, boolean addToConfig) {
+    void registerCacheEntryListener(CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration, boolean addToConfig) {
         if (osType == null) {
             RFuture<Map<String, String>> serverFuture = commandExecutor.readAsync((String) null, StringCodec.INSTANCE, RedisCommands.INFO_SERVER);
             String os = serverFuture.toCompletableFuture().join().get("os");
@@ -3296,7 +3296,7 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
         }
     }
 
-    private void sendSync(boolean sync, List<Object> msg) {
+    void sendSync(boolean sync, List<Object> msg) {
         if (sync) {
             Object syncId = msg.get(msg.size() - 1);
             RSemaphore semaphore = redisson.getSemaphore(getSyncName(syncId));
@@ -3336,7 +3336,8 @@ public class JCache<K, V> extends RedissonObject implements Cache<K, V>, CacheAs
                 if (accessTimeout == 0) {
                     remove();
                 } else if (accessTimeout != -1) {
-                    write(getRawName(), RedisCommands.ZADD_BOOL, getTimeoutSetName(), accessTimeout, encodeMapKey(entry.getKey()));
+                    String name = getRawName(entry.getKey());
+                    write(name, RedisCommands.ZADD_BOOL, getTimeoutSetName(name), accessTimeout, encodeMapKey(entry.getKey()));
                 }
                 return je;
             }
